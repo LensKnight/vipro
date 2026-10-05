@@ -247,55 +247,40 @@ function HomeContent() {
 
   const featuredTrack = tracks[0];
 
-  const featuredActive =
-    current.id === featuredTrack.id;
-
-  const playingFeatured =
-    isPlaying && featuredActive;
+  const featuredActive = current.id === featuredTrack.id;
+  const playingFeatured = isPlaying && featuredActive;
 
   const progress =
     featuredActive && duration > 0
-      ? Math.min(
-          1,
-          Math.max(0, currentTime / duration)
-        )
+      ? Math.min(1, Math.max(0, currentTime / duration))
       : 0;
 
   // Chromium refraction
   useEffect(() => {
-    if (
-      /Chrome|Chromium|Edg/.test(
-        navigator.userAgent
-      )
-    ) {
-      document.documentElement.classList.add(
-        "refract"
-      );
+    if (/Chrome|Chromium|Edg/.test(navigator.userAgent)) {
+      document.documentElement.classList.add("refract");
     }
   }, []);
 
   // Scroll reveal
   useEffect(() => {
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("in");
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        {
-          threshold: 0.12,
-        }
-      );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+      }
+    );
 
     document
       .querySelectorAll(".reveal")
-      .forEach((element) =>
-        observer.observe(element)
-      );
+      .forEach((element) => observer.observe(element));
 
     return () => observer.disconnect();
   }, []);
@@ -310,16 +295,10 @@ function HomeContent() {
 
         <Navbar />
 
-        {/* ================= HERO ================= */}
-
+        {/* HERO */}
         <section className="hero" id="top">
           <div className="hero-background">
-            <img
-              src="/bg.png"
-              alt=""
-              aria-hidden="true"
-            />
-
+            <img src="/bg.png" alt="" aria-hidden="true" />
             <div className="hero-background-overlay" />
           </div>
 
@@ -335,121 +314,45 @@ function HomeContent() {
             </h1>
 
             <p className="hero-description">
-              Original soundtracks crafted around
-              atmosphere, emotion and the stories
-              that deserve their own sound.
+              Original soundtracks crafted around atmosphere, emotion and the
+              stories that deserve their own sound.
             </p>
 
-            <a
-              href="#music"
-              className="hero-button"
-            >
+            <a href="#music" className="hero-button">
               <span>Explore the music</span>
               <span className="arrow">↗</span>
             </a>
           </div>
-
-          <div
-            className={`hero-art ${
-              isPlaying ? "is-playing" : ""
-            }`}
-          >
-            <div className="hero-ring ring-one" />
-            <div className="hero-ring ring-two" />
-
-            <div className="hero-image">
-              <img
-                src={featuredTrack.coverUrl}
-                alt={featuredTrack.title}
-              />
-            </div>
-
-            <button
-              type="button"
-              className={`hero-play ${
-                playingFeatured ? "active" : ""
-              }`}
-              onClick={() =>
-                toggle(featuredTrack)
-              }
-              aria-label={
-                playingFeatured
-                  ? "Pause"
-                  : "Play"
-              }
-            >
-              {playingFeatured ? (
-                <PauseIcon />
-              ) : (
-                <PlayIcon />
-              )}
-            </button>
-
-            <div className="floating-label">
-              <span>
-                {playingFeatured ? (
-                  <Eq />
-                ) : (
-                  "01"
-                )}
-              </span>
-
-              {playingFeatured
-                ? "Now playing"
-                : featuredTrack.title}
-            </div>
-          </div>
         </section>
 
-        {/* ================= FEATURED ================= */}
-
-        <section
-          className="featured"
-          id="music"
-        >
+        {/* FEATURED */}
+        <section className="featured" id="music">
           <div className="section-heading reveal">
             <div>
-              <span className="section-number">
-                01
-              </span>
-
-              <span className="section-label">
-                FEATURED WORK
-              </span>
+              <span className="section-number">01</span>
+              <span className="section-label">FEATURED WORK</span>
             </div>
-
             <p>Selected composition</p>
           </div>
 
           <div
             className="featured-card reveal"
-            style={{
-              ["--d" as string]: "0.1s",
-            }}
+            style={{ ["--d" as string]: "0.1s" }}
           >
             <div className="featured-cover">
               <img
                 src={featuredTrack.coverUrl}
                 alt={featuredTrack.title}
               />
-
               <div className="cover-overlay">
-                <span>
-                  ORIGINAL SOUNDTRACK
-                </span>
+                <span>ORIGINAL SOUNDTRACK</span>
               </div>
             </div>
 
             <div className="featured-content">
               <div>
-                <p className="track-type">
-                  {featuredTrack.genre}
-                </p>
-
-                <h2>
-                  {featuredTrack.title}
-                </h2>
-
+                <p className="track-type">{featuredTrack.genre}</p>
+                <h2>{featuredTrack.title}</h2>
                 <p className="track-description">
                   {featuredTrack.description}
                 </p>
@@ -461,10 +364,7 @@ function HomeContent() {
                     progress={progress}
                     onSeek={
                       featuredActive
-                        ? (ratio) =>
-                            seek(
-                              ratio * duration
-                            )
+                        ? (ratio) => seek(ratio * duration)
                         : undefined
                     }
                   />
@@ -476,59 +376,40 @@ function HomeContent() {
                 className="big-play"
                 onClick={() => {
                   window.dispatchEvent(
-                    new Event(
-                      "open-music-player"
-                    )
+                    new Event("open-music-player")
                   );
-
                   toggle(featuredTrack);
                 }}
               >
                 <span>
-                  {playingFeatured ? (
-                    <PauseIcon />
-                  ) : (
-                    <PlayIcon />
-                  )}
+                  {playingFeatured ? <PauseIcon /> : <PlayIcon />}
                 </span>
-
-                {playingFeatured
-                  ? "Pause"
-                  : "Listen now"}
+                {playingFeatured ? "Pause" : "Listen now"}
               </button>
             </div>
           </div>
         </section>
 
-        {/* ================= SELECTED WORK ================= */}
-
+        {/* SELECTED WORK */}
         <section className="tracks-section">
           <div className="section-heading reveal">
             <div>
-              <span className="section-number">
-                02
-              </span>
-
-              <span className="section-label">
-                SELECTED WORK
-              </span>
+              <span className="section-number">02</span>
+              <span className="section-label">SELECTED WORK</span>
             </div>
 
             <p>
-              {tracks.length
+              {Math.min(tracks.length, 3)
                 .toString()
                 .padStart(2, "0")}{" "}
-              tracks
+              selected tracks
             </p>
           </div>
 
           <div className="track-list">
-            {tracks.map((track, index) => {
-              const active =
-                current.id === track.id;
-
-              const playing =
-                active && isPlaying;
+            {tracks.slice(0, 3).map((track, index) => {
+              const active = current.id === track.id;
+              const playing = active && isPlaying;
 
               return (
                 <div
@@ -537,15 +418,11 @@ function HomeContent() {
                     active ? "active" : ""
                   }`}
                   style={{
-                    ["--d" as string]: `${
-                      index * 0.07
-                    }s`,
+                    ["--d" as string]: `${index * 0.07}s`,
                   }}
                 >
                   <span className="track-number">
-                    {(index + 1)
-                      .toString()
-                      .padStart(2, "0")}
+                    {(index + 1).toString().padStart(2, "0")}
                   </span>
 
                   <img
@@ -557,27 +434,18 @@ function HomeContent() {
                   <button
                     type="button"
                     className="track-details"
-                    onClick={() =>
-                      toggle(track)
-                    }
+                    onClick={() => toggle(track)}
                     aria-label={
                       playing
                         ? `Pause ${track.title}`
                         : `Play ${track.title}`
                     }
                   >
-                    <strong>
-                      {track.title}
-                    </strong>
-
-                    <small>
-                      {track.genre}
-                    </small>
+                    <strong>{track.title}</strong>
+                    <small>{track.genre}</small>
                   </button>
 
-                  <span className="track-year">
-                    {track.year}
-                  </span>
+                  <span className="track-year">{track.year}</span>
 
                   <div className="track-actions">
                     <a
@@ -592,179 +460,131 @@ function HomeContent() {
                     <button
                       type="button"
                       className={`track-play ${
-                        active
-                          ? "active"
-                          : ""
+                        active ? "active" : ""
                       }`}
-                      onClick={() =>
-                        toggle(track)
-                      }
+                      onClick={() => toggle(track)}
                       aria-label={
                         playing
                           ? `Pause ${track.title}`
                           : `Play ${track.title}`
                       }
                     >
-                      {playing ? (
-                        <PauseIcon />
-                      ) : (
-                        <PlayIcon />
-                      )}
+                      {playing ? <PauseIcon /> : <PlayIcon />}
                     </button>
                   </div>
                 </div>
               );
             })}
           </div>
-        </section>
 
-        {/* ================= ABOUT ================= */}
+          {/* MORE TRACKS */}
+          {tracks.length > 3 && (
+            <div className="more-tracks reveal">
+              <a href="/tracks">
+                <span>MORE TRACKS</span>
+                <span className="more-tracks-arrow">↗</span>
+              </a>
 
-        <section
-          className="about"
-          id="about"
-        >
-          <div className="section-heading reveal">
-            <div>
-              <span className="section-number">
-                03
-              </span>
-
-              <span className="section-label">
-                ABOUT
+              <span className="more-tracks-count">
+                {tracks.length - 3} more{" "}
+                {tracks.length - 3 === 1 ? "track" : "tracks"}
               </span>
             </div>
+          )}
+        </section>
 
+        {/* ABOUT (FIXED STRUCTURE) */}
+        <section className="about" id="about">
+          <div className="section-heading reveal">
+            <div>
+              <span className="section-number">03</span>
+              <span className="section-label">ABOUT</span>
+            </div>
             <p>Behind the sound</p>
           </div>
 
           <div className="about-stage">
             {/* Background typography */}
-            <div
-              className="about-ghost-text"
-              aria-hidden="true"
-            >
+            <div className="about-ghost-text" aria-hidden="true">
               SOUND
             </div>
 
-            {/* Main content */}
-            <div className="about-content reveal">
-              <span className="about-mark">
-                “
-              </span>
+            {/* Main Content & Image Wrapper */}
+            <div className="about-grid">
+              <div className="about-content reveal">
+                <span className="about-mark">“</span>
 
-              <h2>
-                Every story
-                <br />
-                <span>
-                  has a sound.
-                </span>
-              </h2>
+                <h2>
+                  Every story
+                  <br />
+                  <span>has a sound.</span>
+                </h2>
 
-              <div
-                className="about-copy"
-                style={{
-                  ["--d" as string]:
-                    "0.15s",
-                }}
-              >
-                <p>
-                  I create original music
-                  and sound for stories that
-                  deserve something more than
-                  silence.
-                </p>
+                <div
+                  className="about-copy"
+                  style={{ ["--d" as string]: "0.15s" }}
+                >
+                  <p>
+                    I create original music and sound for stories that deserve
+                    something more than silence.
+                  </p>
 
-                <p>
-                  From intimate atmospheres
-                  to expansive cinematic
-                  compositions, every piece
-                  is built around emotion,
-                  movement and atmosphere.
-                </p>
+                  <p>
+                    From intimate atmospheres to expansive cinematic compositions,
+                    every piece is built around emotion, movement and atmosphere.
+                  </p>
 
-                <div className="about-meta">
-                  <span>01</span>
-                  <span>
-                    COMPOSITION
-                  </span>
-                </div>
-
-                <div className="about-meta">
-                  <span>02</span>
-                  <span>
-                    PRODUCTION
-                  </span>
-                </div>
-
-                <div className="about-meta">
-                  <span>03</span>
-                  <span>
-                    SOUND DESIGN
-                  </span>
+                  <div className="about-meta-list">
+                    <div className="about-meta">
+                      <span>01</span>
+                      <span>COMPOSITION</span>
+                    </div>
+                    <div className="about-meta">
+                      <span>02</span>
+                      <span>PRODUCTION</span>
+                    </div>
+                    <div className="about-meta">
+                      <span>03</span>
+                      <span>SOUND DESIGN</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Transparent cutout */}
-            <div
-              className="about-portrait reveal"
-              style={{
-                ["--d" as string]:
-                  "0.2s",
-              }}
-            >
-              <img
-                src="/about.png"
-                alt="PROBHANGSHU"
-              />
+              {/* Portrait cutout */}
+              <div
+                className="about-portrait reveal"
+                style={{ ["--d" as string]: "0.2s" }}
+              >
+                <img src="/about.png" alt="PROBHANGSHU" />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* ================= CONTACT ================= */}
+        {/* CONTACT */}
+        <section className="contact" id="contact">
+          <p className="eyebrow reveal">HAVE A PROJECT?</p>
 
-        <section
-          className="contact"
-          id="contact"
-        >
-          <p className="eyebrow reveal">
-            HAVE A PROJECT?
-          </p>
-
-          <h2
-            className="reveal"
-            style={{
-              ["--d" as string]: "0.1s",
-            }}
-          >
+          <h2 className="reveal" style={{ ["--d" as string]: "0.1s" }}>
             Let's create
             <br />
-            something{" "}
-            <i>lasting.</i>
+            something <i>lasting.</i>
           </h2>
 
           <a
             className="reveal"
-            style={{
-              ["--d" as string]: "0.2s",
-            }}
+            style={{ ["--d" as string]: "0.2s" }}
             href="mailto:vishalprobhangshu@gmail.com"
           >
             Start a conversation ↗
           </a>
         </section>
 
-        {/* ================= FOOTER ================= */}
-
+        {/* FOOTER */}
         <footer>
-          <span>
-            © 2026 PROBHANGSHU SC
-          </span>
-
-          <span>
-            Original music & sound
-          </span>
+          <span>© 2026 PROBHANGSHU SC</span>
+          <span>Original music & sound</span>
         </footer>
       </main>
 
